@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="d-flex justify-content-center">
+  <div class="container row m-5">
+    {% for c in conductores %}
+    <div class="col m-2">
+      <div class="rounded-0 card h-100">
+        <div class="card-body">
+          <div class="row">
+            <div class="col d-flex align-items-center">
+              <img src="{{c.foto.url}}" alt="{{c.apellido2}} {{c.apellido1}} {{c.nombres}}" class="img img-fluid">
+            </div>
+            <div class="col">
+              <h5 class="card-title">{{c.dni}}</h5>
+              <h6 class="card-subtitle mb-2 text-body-secondary">{{c.apellido2}} {{c.apellido1}} {{c.nombres}}</h6>
+              <p class="card-text">
+                EMAIL: {{c.email}} <br>
+                CELULAR: {{c.celular}} <br>
+              </p>
+              <a href="#" class="rounded-0 btn btn-outline-info">Ver Detalles</a>
+              <a href="#" class="rounded-0 btn btn-outline-danger">Eliminar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}

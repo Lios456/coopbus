@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="container-sm">
+    <div class="container d-flex justify-content-center">
+        <h1 class="h1">Adminsitración de buses</h1>
+    </div>
+
+    <div class="container d-flex justify-content-center">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{formulario.as_p}}
+            <button class="btn btn-success w-50" type="submit">Guardar</button>
+        </form>
+
+    </div>
+
+    <div class="container-sm d-flex justify-content-center table-responsive">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td>ID</td>
+                    <td>Placa</td>
+                    <td>Foto</td>
+                    <td>Conductor</td>
+                    <td>Marca</td>
+                    <td>Ruta</td>
+                    <td>Horario</td>
+                    <td>Año</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bus in buses %}
+                <tr>
+                    <td>{{bus.id}}</td>
+                    <td>{{bus.placa}}</td>
+                    <td><img class="img img-fluid" src="{{bus.foto.url}}" alt="{{bus.placa}}"></td>
+                    <td>{{bus.conductor}}</td>
+                    <td>{{bus.marca}}</td>
+                    <td>{{bus.ruta}}</td>
+                    <td>{{bus.horario}}</td>
+                    <td>{{bus.anio}}</td>
+                    <td>
+                        <div class="container">
+                            <form action="/buses/borrar/{{bus.id}}" method="post">
+                                {% csrf_token %}
+                                <button class="btn btn-danger" type="submit"
+                                    onclick="return confirm('Seguro quieres eliminar el bus con la placa {{bus.placa}}')">Eliminar</button>
+                            </form>
+                            <a href="/buses/editar/{{bus.id}}" class="btn btn-warning"
+                                onclick="return confirm('Seguro quieres editar el bus con la placa {{bus.placa}}')">Editar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
