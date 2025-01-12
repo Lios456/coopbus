@@ -7,7 +7,7 @@ from ..horarios.models import Horario
 class Buses(models.Model):
     id = models.AutoField(primary_key=True)
     placa = models.CharField(max_length=8, unique=True, verbose_name='PLACA')
-    foto = models.ImageField(upload_to='buses/', default='bus.png', verbose_name='FOTO DE LA UNIDAD')
+    foto = models.ImageField(upload_to='buses/', default='buses/bus.png', verbose_name='FOTO DE LA UNIDAD')
     conductor = models.ForeignKey(Conductores, on_delete=models.CASCADE, null=True, verbose_name='CONDUCTOR DE LA UNIDAD')
     marca = models.CharField(max_length=50, verbose_name='MARCA DE LA UNIDAD')
     anio = models.PositiveIntegerField(verbose_name='AÑO DE LA UNIDAD')

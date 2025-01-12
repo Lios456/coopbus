@@ -13,58 +13,6 @@
         </form>
 
     </div>
-
-    <div class="container-sm d-flex justify-content-center table-responsive">
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <td>ID</td>
-                    <td>Placa</td>
-                    <td>Foto</td>
-                    <td>Conductor</td>
-                    <td>Marca</td>
-                    <td>Ruta</td>
-                    <td>Horario</td>
-                    <td>Año</td>
-                    <td>Acciones</td>
-                </tr>
-            </thead>
-            <tbody>
-                {% for bus in buses %}
-                <tr>
-                    <td>{{bus.id}}</td>
-                    <td>{{bus.placa}}</td>
-                    <td><img class="img img-fluid" src="{{bus.foto.url}}" alt="{{bus.placa}}"></td>
-                    <td>{{bus.conductor}}</td>
-                    <td>{{bus.marca}}</td>
-                    <td>{{bus.ruta}}</td>
-                    <td>
-                        
-                        {% for h in bus.horario.all%}
-                            <li>{{h}}</li>
-                        {% endfor %}
-                            
-                    </td>
-                    <td>{{bus.anio}}</td>
-                    <td>
-                        <div class="container">
-                            <form action="/buses/administracion/eliminar/{{bus.id}}" method="post">
-                                {% csrf_token %}
-                                <button class="btn btn-danger" type="submit"
-                                    onclick="return confirm('Seguro quieres eliminar el bus con la placa {{bus.placa}}')">Eliminar</button>
-                            </form>
-                            <a href="/buses/administracion/editar/{{bus.id}}" class="btn btn-warning"
-                                onclick="return confirm('Seguro quieres editar el bus con la placa {{bus.placa}}')">Editar</a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-    </div>
-
 </div>
 
 {% endblock %}

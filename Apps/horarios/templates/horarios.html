@@ -2,8 +2,38 @@
 
 
 {% block body %}
-    <div class="d-flex justify-content-center">
+    <div class="row p-5">
         
+        {% for h in horarios %}
+        <div class="col-sm-4 p-3 mb-5">
+            <div class="rounded-0 border-0 card shadow-lg">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between p-md-1">
+                    <div class="d-flex justify-content-end">
+                      <div>
+                        <h4>{{h.codigo}}</h4>
+                      </div>
+                    </div>
+                    <div class="align-self-center">
+                      <h2 class="h1 mb-0">{{h.hora}}</h2>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer bg-body">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <a href="/horarios/administracion/editar/{{h.id}}" class="rounded-0 btn btn-sm me-2 btn-outline-warning">Editar</a>
+                        <form action="/horarios/administracion/eliminar/{{h.id}}" method="post">
+                            {% csrf_token %}
+                            <button class="rounded-0 btn btn-outline-danger btn-sm">
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+            
     </div>
 {% endblock  %}
     

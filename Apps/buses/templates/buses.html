@@ -7,5 +7,115 @@
         <h3 class="h3">Tenemos {{total_buses}} unidades disponibles para tus viajes</h3>
     </div>
 </div>
+
+<div class="row justify-content-center">
+
+    {% for bus in buses %}
+    <div class="col-lg-10 mt-5 mb-5">
+        <div class="rounded-0 card shadow-lg">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Unidad: {{ bus.placa }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- Columna de la foto -->
+                    <div class="col-md-4 mb-4">
+                        <div class="text-center">
+                            <img src="{{ bus.foto.url }}" alt="Foto del Bus {{ bus.placa }}"
+                                class="img-fluid rounded mb-3" style="max-height: 250px; object-fit: cover;">
+                            <div class="badge bg-{% if bus.estado == 'ACTIVO' %}success {%else%}danger{%endif%} mb-2">
+                                {{ bus.estado }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Columna de información -->
+                    <div class="col-md-8">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <label class="text-muted small mb-1">Conductor</label>
+                                    <p class="mb-3 fw-bold">{{ bus.conductor }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <label class="text-muted small mb-1">Marca</label>
+                                    <p class="mb-3 fw-bold">{{ bus.marca }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <label class="text-muted small mb-1">Año</label>
+                                    <p class="mb-3 fw-bold">{{ bus.anio }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <label class="text-muted small mb-1">Capacidad</label>
+                                    <p class="mb-3 fw-bold">{{ bus.asientos }} asientos</p>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="detail-item">
+                                    <label class="text-muted small mb-1">Ruta Asignada</label>
+                                    <p class="mb-3 fw-bold">{{ bus.ruta }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sección de Horarios -->
+                        <div class="mt-4">
+                            <h5 class="mb-3">Horarios Asignados</h5>
+                            <div class="row g-2">
+                                {% for horario in bus.horario.all %}
+                                <div class="col-auto">
+                                    <span class="badge bg-primary">{{ horario }}</span>
+                                </div>
+                                {% empty %}
+                                <div class="col-12">
+                                    <p class="text-muted">No hay horarios asignados</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección de Asientos -->
+                <div class="mt-4">
+                    <h5 class="border-bottom pb-2">Estado de Asientos</h5>
+                    <div class="row g-2 mt-2">
+                        {% for asiento in bus.puestos.all %}
+                        <div class="col-auto">
+                            <a href="/ventas/asiento/{{asiento.id}}"
+                                class="seat-indicator {% if asiento.ocupado %}bg-danger{% else %}bg-success{% endif %}"
+                                style="width: 40px; height: 40px; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+                                {{ forloop.counter }}
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer bg-white">
+                <div class="d-flex justify-content-end align-items-center">
+                    <a href="/buses/administracion/editar/{{bus.id}}"
+                        class="rounded-0 btn btn-outline-primary btn-sm me-2">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <form action="/buses/administracion/eliminar/{{bus.id}}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="rounded-0 btn btn-outline-danger btn-sm"
+                            onclick="return confirm('Estás seguro de eliminar la unidad con la placa {{bus.placa}}')">
+                            <i class="bi bi-power"></i> Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
-    
