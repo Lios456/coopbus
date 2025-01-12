@@ -22,10 +22,15 @@ def administracion(request):
     else:
         return render(request, 'administracion.html', {'buses':Buses.objects.filter(estado='ACTIVO'),'formulario':BusForm()})
 
-def guardar(request):
+def eliminar(request, id):
     if request.method == 'POST':
-        messages.success(request, 'Se guardó con éxito el Bus')
-        pass
+        try:
+            Buses.objects.get(id=id).delete()
+            messages.success(request,'Se ha eliminado correctamente el bus')
+            return redirect('/buses/administracion/')
+        except Exception as e:
+            messages.error(f'Hay un error: {e}')
+            return redirect('/buses/administracion/')
     else:
         return render(request, 'administracion.html', {'buses':Buses.objects.filter(estado='ACTIVO'),'formulario':BusForm()})
     

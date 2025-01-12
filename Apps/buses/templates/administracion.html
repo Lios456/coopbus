@@ -49,7 +49,7 @@
                     <td>{{bus.anio}}</td>
                     <td>
                         <div class="container">
-                            <form action="/buses/borrar/{{bus.id}}" method="post">
+                            <form action="/buses/administracion/eliminar/{{bus.id}}" method="post">
                                 {% csrf_token %}
                                 <button class="btn btn-danger" type="submit"
                                     onclick="return confirm('Seguro quieres eliminar el bus con la placa {{bus.placa}}')">Eliminar</button>
