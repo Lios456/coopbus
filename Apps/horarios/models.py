@@ -19,6 +19,6 @@ class HorarioForm(forms.ModelForm):
         fields = '__all__'
         widgets={
             'codigo' : forms.TextInput(attrs={'class':'form-control'}),
-            'hora' : forms.TimeInput(attrs={'class':'form-control'})
+            'hora' : forms.TimeInput(attrs={'class':'form-control', 'type':'time'})
         }
 

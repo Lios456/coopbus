@@ -39,3 +39,6 @@ class Asientos(models.Model):
     id = models.AutoField(primary_key=True)
     bus = models.ForeignKey(Buses, on_delete=models.CASCADE, related_name='puestos')
     ocupado = models.BooleanField(verbose_name='ASIENTO', default=False)
+
+    def __str__(self):
+        return f'Asiento {self.id} del Bus {self.bus} : {self.ocupado}'

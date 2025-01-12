@@ -11,7 +11,7 @@ class Ruta(models.Model):
     precio = models.DecimalField(verbose_name='Precio', default=0.3, max_digits=4, decimal_places=2)
 
     def __str__(self):
-        return f'{self.codigo} [{self.partida} -- {self.destino}]'
+        return f'{self.partida} - {self.destino}'
     
 class RutaForm(forms.ModelForm):
 
@@ -23,5 +23,5 @@ class RutaForm(forms.ModelForm):
             'codigo': forms.TextInput(attrs={'class':'form-control'}),
             'partida': forms.Textarea(attrs={'class':'form-control'}),
             'destino': forms.Textarea(attrs={'class':'form-control'}),
-            'precio': forms.NumberInput(attrs={'class':'form-control', 'step':0.1})
+            'precio': forms.NumberInput(attrs={'class':'form-control', 'step':0.1, 'type':'number'})
         }
