@@ -1,4 +1,5 @@
 from django.db import models
+from ..horarios.models import *
 from django import forms
 
 # Create your models here.
@@ -12,6 +13,7 @@ class Ruta(models.Model):
 
     def __str__(self):
         return f'{self.partida} - {self.destino}'
+    
     
 class RutaForm(forms.ModelForm):
 

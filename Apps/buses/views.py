@@ -14,15 +14,7 @@ def administracion(request):
             form = BusForm(request.POST)
             if form.is_valid():
                 bus = form.save()
-
-                total = int(request.POST.get('asientos',40))
-                asientos_list = [
-                    Asientos(bus=bus)
-                    for _ in range(total)
-                ]
-                Asientos.objects.bulk_create(asientos_list)
-
-                messages.success(request, 'Se guardó con éxito el Bus y generaron los asientos')
+                messages.success(request, 'Se guardó con éxito el Bus')
             else:
                 messages.warning(request, 'Rellena los campos adecuadamente')
                 return render(request, 'administracion.html', {'buses':Buses.objects.filter(estado='ACTIVO'),

@@ -28,6 +28,7 @@ urlpatterns = [
     path('horarios/', include('Apps.horarios.urls')),
     path('rutas/', include('Apps.rutas.urls')),
     path('ventas/', include('Apps.ventas.urls')),
+    path('viajes/', include('Apps.viajes.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

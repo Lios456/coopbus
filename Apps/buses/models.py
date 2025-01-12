@@ -32,12 +32,13 @@ class BusForm(forms.ModelForm):
             'estado': forms.TextInput(attrs={'class': 'form-control'}),
             'asientos': forms.NumberInput(attrs={'class': 'form-control'}),
             'ruta': forms.Select(attrs={'class': 'form-select'}),
-            'horario' :forms.CheckboxSelectMultiple(),
+            'horario' :forms.CheckboxSelectMultiple(attrs={'disabled':'true'}),
         }
 
 class Asientos(models.Model):
     id = models.AutoField(primary_key=True)
     bus = models.ForeignKey(Buses, on_delete=models.CASCADE, related_name='puestos')
+    horario = models.ForeignKey(Horario, related_name='horario_asiento', on_delete=models.RESTRICT, default='1')
     ocupado = models.BooleanField(verbose_name='ASIENTO', default=False)
 
     def __str__(self):

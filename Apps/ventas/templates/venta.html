@@ -3,50 +3,48 @@
 {% block body %}
 <div class="container-sm d-sm-flex justify-content-center">
     <div class="container w-75 shadow-lg bg-body-tertiary p-5 m-3">
-        <h1 class="h1">Nueva Venta</h1>
-        <div class="mb-3">
-            <label for="id_cliente" class="form-label">Cliente</label>
-            <div class="d-flex">
-                {{ form.cliente }}
-                <button type="button" class="btn btn-primary ms-2" id="buscarCliente">Buscar Cliente</button>
-            </div>
-            <div id="infoCliente" class="mt-3"></div>
-        </div>
-        <div class="mb-3">
-            <label for="id_bus" class="form-label">Bus</label>
-            <div class="d-flex">
-                {{ form.bus }}
-                <button type="button" class="btn btn-primary ms-2" id="buscarBus">Cargar Datos</button>
-            </div>
-        </div>
-        <div id="infoAsientos" class="mt-3"></div>
-        <div id="infoHorarios" class="mt-3"></div>
-    
-        <!--
         <form action="" method="post">
             {% csrf_token %}
-            {{form.as_p}}
-            <div class="d-sm-flex">
-                <button type="submit" class="rounded-0 btn btn-outline-success w-75">GUARDAR</button>
+            <h1 class="h1">Nueva Venta</h1>
+            <div class="mb-3">
+                <label for="id_cliente" class="form-label">Cliente</label>
+                <div class="d-flex">
+                    {{ form.cliente }}
+                    <button type="button" class="rounded-0 btn btn-outline-success ms-2" id="buscarCliente">Buscar
+                        Cliente</button>
+                </div>
+                <div id="infoCliente" class="mt-3"></div>
+            </div>
+            <div class="mb-3">
+                <label for="id_bus" class="form-label">Bus</label>
+                <div class="d-flex">
+                    {{ form.bus }}
+                    <button type="button" class="rounded-0 btn btn-outline-success ms-2" id="buscarBus">Ver
+                        Horarios</button>
+                </div>
+            </div>
+            <div id="infoHorarios" class="mt-3"></div>
+            <div id="infoAsientos" class="mt-3"></div>
+            <input type="hidden" name="asientos" id="asientosSeleccionados">
+
+            <div class="d-sm-flex m-5 justify-content-center">
+                <button type="submit" class="rounded-0 btn btn-outline-success w-75">RESERVAR</button>
             </div>
         </form>
-        -->
-        
-    </div>
-</div>
 
-<div class="container">
-    {{cliente}}
-</div>
-<div class="container">
-    {{horarios}}
-</div>
-<div class="container">
-    {{asientos}}
+
+    </div>
 </div>
 
 
 <script>
+    let asientos = [];
+    document.querySelector('form').addEventListener('submit', function (event) {
+        const asientosInput = document.getElementById('asientosSeleccionados');
+        // Convierte la lista de asientos en una cadena JSON para enviarla
+        asientosInput.value = JSON.stringify(asientos);
+    });
+
     document.getElementById('buscarCliente').addEventListener('click', function () {
         const dni = document.getElementById('id_cliente').value;
         if (dni) {
@@ -59,6 +57,7 @@
                     } else {
                         infoDiv.innerHTML = `
                                 <div class="alert alert-success">
+                                    <input type='hidden' value='${data.id}' name='cliente'></input>
                                     <strong>Cliente:</strong> ${data.nombre_completo}<br>
                                     <strong>Email:</strong> ${data.email}
                                 </div>`;
@@ -79,27 +78,60 @@
                     const horariosDiv = document.getElementById('infoHorarios');
                     if (data.horarios) {
                         horariosDiv.innerHTML = `
-                            <h5>Horarios Disponibles:</h5>
-                            <ul>${data.horarios.map(h => `<li>${h}</li>`).join('')}</ul>`;
-                    }
-
-                    // Mostrar Asientos
-                    const asientosDiv = document.getElementById('infoAsientos');
-                    if (data.asientos) {
-                        asientosDiv.innerHTML = `
-                            <h5>Asientos Disponibles:</h5>
-                            <div class="row">
-                                ${data.asientos.map(a => `
-                                    <div class="col-2">
-                                        <input type="checkbox" id="asiento${a.id}" name="asiento" value="${a.id}">
-                                        <label for="asiento${a.id}" class="btn btn-sm btn-success w-100">${a.numero}</label>
-                                    </div>`).join('')}
-                            </div>`;
+                            <div class="d-flex">
+                                <h5>Horarios Disponibles:</h5>
+                                <select class="form-select" id="horario_asiento">
+                                    <option value = "">--Selecciona un horario --</option>
+                                    ${data.horarios.map(h => `<option value="${h.id}">${h.hora}</option>`).join('')}
+                                </select>
+                            </div>
+                            
+                            `;
                     }
                 });
         } else {
             alert('Por favor, selecciona un bus.');
         }
     });
+
+    document.getElementById('infoHorarios').addEventListener('change', async function (event) {
+        if (event.target && event.target.id === 'horario_asiento') {
+            const horarioID = event.target.value;
+            const busId = document.getElementById('id_bus').value;
+            if (horarioID) {
+                try {
+                    const response = await fetch(`/ventas/ver_asientos/?id_bus=${busId}&id_horario=${horarioID}`);
+                    const data = await response.json();
+                    // Mostrar Asientos
+                    const asientosDiv = document.getElementById('infoAsientos');
+                    if (data.asientos) {
+                        asientosDiv.innerHTML = `
+                        <h5>Asientos Disponibles:</h5>
+                        <div class="row">
+                            ${data.asientos.map((a, index) => `
+                                <div class="col-2">
+                                    <input type="checkbox" id="asiento${a.id}" name="asiento${a.id}" value="${a.id}" ${a.ocupado ? 'disabled="true"' : ''} onclick='agregar_asiento(${a.id})'>
+                                    <label for="asiento${a.id}" class="btn btn-sm btn-${a.ocupado ? 'danger' : 'success'} w-100">${index + 1}</br>${a.ocupado ? 'Ocupado' : 'Libre'}</label>
+
+                                </div>`).join('')}
+                        </div>`;
+                    }
+                } catch (error) {
+                    console.error('Error al obtener asientos:', error);
+                }
+            } else {
+                alert('Selecciona un horario');
+            }
+        }
+    });
+
+    function agregar_asiento(id) {
+        if (asientos.includes(id)) {
+            asientos.splice(asientos.indexOf(id), 1); 
+        } else {
+            asientos.push(id);
+        }
+        console.log(asientos);
+    }
 </script>
 {% endblock %}
