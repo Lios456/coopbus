@@ -20,7 +20,7 @@ class Buses(models.Model):
 
     ruta = models.ForeignKey(Ruta, on_delete=models.PROTECT, null=True, verbose_name='RUTA')
 
-    horario = models.ManyToManyField(Horario, verbose_name='HORAIOS', null=True)
+    horario = models.ManyToManyField(Horario, verbose_name='HORARIOS', null=True)
 
     estado = models.CharField(max_length=30, default='ACTIVO', verbose_name='ESTADO DE LA UNIDAD')
 
@@ -42,7 +42,7 @@ class BusForm(ModelForm):
             'estado': forms.TextInput(attrs={'class': 'form-control'}),
             'asientos': forms.NumberInput(attrs={'class': 'form-control'}),
             'ruta': forms.Select(attrs={'class': 'form-select'}),
-            'horario' :forms.Select(attrs={'class': 'form-select'}),
+            'horario' :forms.CheckboxSelectMultiple(),
         }
 
 class Asientos(models.Model):
