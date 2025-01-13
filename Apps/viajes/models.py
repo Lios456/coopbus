@@ -8,9 +8,9 @@ from ..rutas.models import *
 class Viaje(models.Model):
     id = models.BigAutoField(primary_key=True)
     codigo = models.CharField(max_length=20, unique=True)
-    ruta = models.ForeignKey(Ruta, verbose_name='RUTA', on_delete=models.RESTRICT)
-    bus = models.ForeignKey(Buses, verbose_name='UNIDAD', on_delete=models.RESTRICT)
-    horario = models.ForeignKey(Horario, verbose_name='HORARIO DEL VIAJE', on_delete=models.RESTRICT)
+    ruta = models.ForeignKey(Ruta, verbose_name='RUTA', on_delete=models.DO_NOTHING)
+    bus = models.ForeignKey(Buses, verbose_name='UNIDAD', on_delete=models.DO_NOTHING)
+    horario = models.ForeignKey(Horario, verbose_name='HORARIO DEL VIAJE', on_delete=models.DO_NOTHING, related_name='horario_viaje')
 
     def __str__(self):
         return f'{self.codigo}'

@@ -1,5 +1,4 @@
 from django.db import models
-from ..horarios.models import *
 from django import forms
 
 # Create your models here.

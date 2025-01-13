@@ -2,26 +2,26 @@
 
 
 {% block body %}
-<div class="row p-5">
-
+<div class="row ">
+    <div class="container text-center">
+        <h1 class="h1">Viajes</h1>
+    </div>
     {% for v in viajes %}
-    <div class="col-sm-3 p-3 mb-5">
-        <div class="rounded-0 border-0 card shadow-lg">
+    <div class="col-sm-6 p-3 mb-5">
+        <div class="rounded-0 border-0 card shadow-lg h-100">
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
-                        <div>
-                            <h4>{{v.codigo}}</h4>
-                        </div>
+                    <div class="col-12 text-center">
+                        <h4 class="h4">{{v.codigo}}</h4>
                     </div>
-                    <div class="col">
-                        <p class="mb-0 text-center">Ruta: {{v.ruta}}</h2>
+                    <div class="col-6 d-flex align-items-center mb-2">
+                        <p class="mb-0 text-center"><b>Ruta:</b> {{v.ruta}}</h2>
                     </div>
-                    <div class="col">
-                        <p class="text-center mb-0">{{v.bus}}</h2>
+                    <div class="col-6">
+                        <p class="text-center mb-0"><b>Unidad:</b> {{v.bus}}</h2>
                     </div>
-                    <div class="col">
-                        <p class="text-center mb-0">{{v.horario}}</h2>
+                    <div class="col-12">
+                        <p class="text-center mb-0"><b>Horario:</b> {{v.horario}}</h2>
                     </div>
                 </div>
             </div>

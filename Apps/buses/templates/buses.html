@@ -87,11 +87,12 @@
                     <h5 class="border-bottom pb-2">Estado de Asientos</h5>
                     <div class="row g-2 mt-2">
                         {% for asiento in bus.puestos.all %}
-                        <div class="col-auto">
+                        <div class="col-2">
                             <a href="/ventas/asiento/{{asiento.id}}"
-                                class="seat-indicator {% if asiento.ocupado %}bg-danger{% else %}bg-success{% endif %}"
-                                style="width: 40px; height: 40px; border-radius: 5px; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+                                class="btn text-light {% if asiento.ocupado %}bg-danger{% else %}bg-success{% endif %}">
                                 {{ forloop.counter }}
+                                <br>
+                                Horario: {{ asiento.horario.hora }}
                             </a>
                         </div>
                         {% endfor %}

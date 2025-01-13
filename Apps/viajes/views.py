@@ -13,14 +13,21 @@ def administracion(request):
             form = ViajeForm(request.POST)
             if form.is_valid():
                 viaje = form.save()
+                #Obtengo el bus
                 bus = viaje.bus
+                #Al bus obtenido del formulario le doy el horario y la ruta del viaje
                 bus.horario.add(viaje.horario)
+                bus.ruta = viaje.ruta
+                bus.save()
+
+                #Genero los asientos para ese viaje
                 total = int(request.POST.get('asientos',40))
                 asientos_list = [
                     Asientos(bus=bus, horario=viaje.horario)
                     for _ in range(total)
                 ]
                 Asientos.objects.bulk_create(asientos_list)
+
                 messages.success(request, 'Se guardó con éxito el Viaje y los asientos')
             else:
                 messages.warning(request, 'Rellena los campos adecuadamente')
@@ -37,7 +44,15 @@ def administracion(request):
 def eliminar(request, id):
     if request.method == 'POST':
         try:
-            Viaje.objects.get(id=id).delete()
+            viaje = Viaje.objects.get(id=id)
+            #Elimino el horario y la ruta
+            viaje.bus.horario.remove(viaje.horario)
+            viaje.bus.ruta = None
+            viaje.bus.save()
+            #Elimino los asientos que sean de ese bus en ese horario
+            asientos = Asientos.objects.filter(bus=viaje.bus, horario=viaje.horario)
+            asientos.delete()
+            viaje.delete()
             messages.success(request,'Se ha eliminado correctamente el viaje')
             return redirect('/viajes/')
         except Exception as e:
@@ -54,7 +69,19 @@ def editar(request, id):
         try:
             form = ViajeForm(request.POST, instance = viaje)
             if form.is_valid():
-                form.save()
+                viaje_ant = Viaje.objects.get(codigo = request.POST.get('codigo'))
+                bus = viaje_ant.bus
+                #quito el horario anterior
+                bus.horario.remove(viaje_ant.horario)
+                #obtengo los asientos con el horario anterior
+                asientos = Asientos.objects.filter(bus=bus, horario=viaje_ant.horario)
+
+                #actualizo los horarios
+                viaje = form.save()
+                bus.horario.add(viaje.horario)
+                bus.ruta = Ruta.objects.get(id = viaje.ruta.id)
+                bus.save()
+                asientos.update(horario = viaje.horario)
                 messages.success(request, 'Se editó con éxito el viaje')
             else:
                 messages.warning(request, 'Rellena los campos adecuadamente')

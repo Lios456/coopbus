@@ -11,7 +11,7 @@ class Buses(models.Model):
     conductor = models.ForeignKey(Conductores, on_delete=models.CASCADE, null=True, verbose_name='CONDUCTOR DE LA UNIDAD')
     marca = models.CharField(max_length=50, verbose_name='MARCA DE LA UNIDAD')
     anio = models.PositiveIntegerField(verbose_name='AÑO DE LA UNIDAD')
-    ruta = models.ForeignKey(Ruta, on_delete=models.PROTECT, null=True, verbose_name='RUTA')
+    ruta = models.ForeignKey(Ruta, on_delete=models.DO_NOTHING, null=True, verbose_name='RUTA', blank=True)
     horario = models.ManyToManyField(Horario, verbose_name='HORARIOS', null=True)
     estado = models.CharField(max_length=30, default='ACTIVO', verbose_name='ESTADO DE LA UNIDAD')
     asientos = models.PositiveIntegerField(default=40, verbose_name='¿CUÁNTOS ASIENTOS PARA PASAJEROS TIENE LA UNIDAD?')
@@ -22,7 +22,7 @@ class Buses(models.Model):
 class BusForm(forms.ModelForm):
     class Meta:
         model = Buses
-        fields = '__all__'
+        fields = ['placa','foto','conductor','marca','anio','estado']
         widgets = {
             'placa': forms.TextInput(attrs={'class': 'form-control'}),
             'foto': forms.FileInput(attrs={'class': 'form-control'}),
@@ -30,9 +30,6 @@ class BusForm(forms.ModelForm):
             'marca': forms.TextInput(attrs={'class': 'form-control'}),
             'anio': forms.NumberInput(attrs={'class': 'form-control'}),
             'estado': forms.TextInput(attrs={'class': 'form-control'}),
-            'asientos': forms.NumberInput(attrs={'class': 'form-control'}),
-            'ruta': forms.Select(attrs={'class': 'form-select'}),
-            'horario' :forms.CheckboxSelectMultiple(attrs={'disabled':'true'}),
         }
 
 class Asientos(models.Model):

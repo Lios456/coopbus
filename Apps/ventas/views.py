@@ -12,22 +12,25 @@ def dash(request):
 
 def venta(request):
     if request.method == 'POST':
-        asientos_seleccionados = request.POST.get('asientos')
+        try:
+            asientos_seleccionados = request.POST.get('asientos')
         
-        if asientos_seleccionados:
-            asientos = json.loads(asientos_seleccionados)
-            for _ in asientos:
-                asi = Asientos.objects.get(id=_)
-                asi.ocupado = True
-                asi.save()
+            if asientos_seleccionados:
+                asientos = json.loads(asientos_seleccionados)
+                for _ in asientos:
+                    asi = Asientos.objects.get(id=_)
+                    asi.ocupado = True
+                    asi.save()
 
-            messages.success(request, f'Asientos seleccionados: {asi}')  # Muestra los asientos seleccionados
-            # Aquí puedes procesar la lista de asientos seleccionados y hacer lo que necesites con ella
-            # Ejemplo: realizar la reserva, guardar en la base de datos, etc.
-        else:
-           messages.error(request, 'No hay asientos')
+                messages.success(request, f'Asientos seleccionados: {asi}')  # Muestra los asientos seleccionados
+                # Aquí puedes procesar la lista de asientos seleccionados y hacer lo que necesites con ella
+                # Ejemplo: realizar la reserva, guardar en la base de datos, etc.
+            else:
+                messages.error(request, 'No hay asientos')
 
-        return JsonResponse({'status': 'success', 'asientos': asientos})
+            return JsonResponse({'status': 'success', 'asientos': asientos})
+        except Exception as e:
+            messages.error(request, f'Error: {e}')
     return render(request, 'venta.html', {'titulo': 'Panel de Ventas', 'form': VentaForm()})
 
 def ver_horarios(request):
