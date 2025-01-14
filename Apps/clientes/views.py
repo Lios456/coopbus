@@ -15,7 +15,7 @@ def administracion(request):
             if form.is_valid():
                 form.save()
                 messages.success(request, f'El cliente con el DNI {request.POST.get('dni')} se ha guardado correctamente')
-                return redirect('/clientes/administracion/')
+                return redirect('/clientes/')
             else:
                 messages.error(request, 'El formulario no es correcto')
                 return render(request, 'administracion_clientes.html', {'form': form})

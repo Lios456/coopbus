@@ -17,7 +17,6 @@ def administracion(request):
                 bus = viaje.bus
                 #Al bus obtenido del formulario le doy el horario y la ruta del viaje
                 bus.horario.add(viaje.horario)
-                bus.ruta = viaje.ruta
                 bus.save()
 
                 #Genero los asientos para ese viaje
@@ -47,7 +46,6 @@ def eliminar(request, id):
             viaje = Viaje.objects.get(id=id)
             #Elimino el horario y la ruta
             viaje.bus.horario.remove(viaje.horario)
-            viaje.bus.ruta = None
             viaje.bus.save()
             #Elimino los asientos que sean de ese bus en ese horario
             asientos = Asientos.objects.filter(bus=viaje.bus, horario=viaje.horario)
@@ -79,7 +77,6 @@ def editar(request, id):
                 #actualizo los horarios
                 viaje = form.save()
                 bus.horario.add(viaje.horario)
-                bus.ruta = Ruta.objects.get(id = viaje.ruta.id)
                 bus.save()
                 asientos.update(horario = viaje.horario)
                 messages.success(request, 'Se editó con éxito el viaje')

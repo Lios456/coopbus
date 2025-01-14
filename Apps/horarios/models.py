@@ -9,9 +9,8 @@ class Horario(models.Model):
     codigo = models.CharField(max_length=10, unique=True)
     hora = models.TimeField()
     ruta = models.ForeignKey(Ruta, related_name='ruta_del_horario', on_delete=models.DO_NOTHING, blank=True, null=True)
-
     def __str__(self):
-        return f"{self.codigo} {self.hora}"
+        return f"{self.codigo} {self.hora} {self.ruta}"
     
 class HorarioForm(forms.ModelForm):
 
@@ -23,5 +22,6 @@ class HorarioForm(forms.ModelForm):
             'codigo' : forms.TextInput(attrs={'class':'form-control'}),
             'hora' : forms.TimeInput(attrs={'class':'form-control', 'type':'time'}),
             'ruta' : forms.Select(attrs={'class':'form-select'}),
+            
         }
 

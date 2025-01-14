@@ -11,10 +11,8 @@ class Buses(models.Model):
     conductor = models.ForeignKey(Conductores, on_delete=models.CASCADE, null=True, verbose_name='CONDUCTOR DE LA UNIDAD')
     marca = models.CharField(max_length=50, verbose_name='MARCA DE LA UNIDAD')
     anio = models.PositiveIntegerField(verbose_name='AÑO DE LA UNIDAD')
-    ruta = models.ForeignKey(Ruta, on_delete=models.DO_NOTHING, null=True, verbose_name='RUTA', blank=True)
     horario = models.ManyToManyField(Horario, verbose_name='HORARIOS', null=True)
-    estado = models.CharField(max_length=30, default='ACTIVO', verbose_name='ESTADO DE LA UNIDAD')
-    asientos = models.PositiveIntegerField(default=40, verbose_name='¿CUÁNTOS ASIENTOS PARA PASAJEROS TIENE LA UNIDAD?')
+    estado = models.CharField(max_length=30, default='ACTIVO', verbose_name='ESTADO DE LA UNIDAD', choices=[('ACTIVO','ACTIVO'),('NO ACTIVO','NO ACTIVO')])
 
     def __str__(self):
         return f'{self.placa} {self.conductor}'
@@ -29,7 +27,7 @@ class BusForm(forms.ModelForm):
             'conductor': forms.Select(attrs={'class': 'form-select'}),
             'marca': forms.TextInput(attrs={'class': 'form-control'}),
             'anio': forms.NumberInput(attrs={'class': 'form-control'}),
-            'estado': forms.TextInput(attrs={'class': 'form-control'}),
+            'estado': forms.Select(attrs={'class': 'form-select'}),
         }
 
 class Asientos(models.Model):

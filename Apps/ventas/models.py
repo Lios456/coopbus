@@ -12,7 +12,7 @@ class Venta(models.Model):
     bus = models.ForeignKey(Buses, on_delete=models.RESTRICT, verbose_name='Unidad')
     horario = models.ForeignKey(Horario, on_delete=models.RESTRICT, verbose_name='Horario')
     asiento = models.ManyToManyField(Asientos, related_name='asientos')
-    fecha = models.DateTimeField(auto_now=True)
+    fecha = models.DateTimeField(auto_now=True, auto_created=True)
 
 
 class VentaForm(forms.ModelForm):
@@ -22,10 +22,11 @@ class VentaForm(forms.ModelForm):
         model = Venta
         fields = '__all__'
         widgets={
-            'cliente' : forms.TextInput(attrs={'class':'form-select'}),
+            'cliente' : forms.TextInput(attrs={'class':'form-control'}),
             'bus' : forms.Select(attrs={'class':'form-select'}),
             'horario' : forms.Select(attrs={'class':'form-select'}),
             'asiento' : forms.SelectMultiple(attrs={'class':'form-select'}),
+            'fecha' : forms.DateInput(attrs={'class':'form-control', 'disabled':'true'}),
         }
 
 

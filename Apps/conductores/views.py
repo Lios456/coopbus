@@ -14,7 +14,7 @@ def administracion(request):
             try:
                 form.save()
                 messages.success(request, "Se guardó con éxito")
-                redirect('/conductores/')
+                return redirect('/conductores/')
             except Exception as e:
                 messages.error(request, f"Hubo un error: {e}")
                 return render(request, 'administracion_conductores.html', {'form': form})

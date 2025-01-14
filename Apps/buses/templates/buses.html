@@ -50,16 +50,13 @@
                                     <p class="mb-3 fw-bold">{{ bus.anio }}</p>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="detail-item">
-                                    <label class="text-muted small mb-1">Capacidad</label>
-                                    <p class="mb-3 fw-bold">{{ bus.asientos }} asientos</p>
-                                </div>
-                            </div>
                             <div class="col-12">
                                 <div class="detail-item">
-                                    <label class="text-muted small mb-1">Ruta Asignada</label>
-                                    <p class="mb-3 fw-bold">{{ bus.ruta }}</p>
+                                    <h5 class="text-muted small mb-1">Ruta Asignada</h5>
+                                    {% for h in bus.horario.all %}
+                                    <p class="mb-3 fw-bold">{{ h.ruta }}</p>
+                                    {% endfor %}
+                                    
                                 </div>
                             </div>
                         </div>

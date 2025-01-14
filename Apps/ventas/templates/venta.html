@@ -3,30 +3,69 @@
 {% block body %}
 <div class="container-sm d-sm-flex justify-content-center">
     <div class="container w-75 shadow-lg bg-body-tertiary p-5 m-3">
+        <h1 class="h1">Nueva Venta</h1>
+        <form action="" method="get">
+            {% csrf_token %}
+            <div class="row m-3">
+                <label for="" class="form-label">Cliente</label>
+                <input type="text" name="cliente_dni" id="cliente_dni" class="form-control" value="{{cliente.dni}}" required>
+            </div>
+            {% if cliente %}
+            <div class="alert alert-success" class="mt-3">
+                Cliente encontrado: {{cliente}}
+            </div>
+            {% endif %}
+            <div class="row m-3">
+                <label for="" class="form-label">BUS</label>
+                <select name="bus_id" id="bus_id" class="form-select" required>
+                    <option value="">-- Selecciona un bus --</option>
+                    {% for b in buses %}
+                    <option value="{{b.id}}" {% if b.id == bus.id %}selected{% endif %}>{{b}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            {% if viajes %}
+            <div class="row">
+                <label for="" class="form-label">VIAJE</label>
+                <select name="id_viaje" id="id_viaje" class="form-select">
+                    <option value="">-- Selecciona un viaje --</option>
+                    {% for v in viajes %}
+                    <option value="{{v.id}}" {%if v.id == viaje.id %}selected{%endif%} >{{v}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% else %}
+            <div class="alert alert-danger" class="mt-3">
+                La unidad no tiene viajes asignados
+            </div>
+            {% endif %}
+
+            <div class="d-flex row m-3 justify-content-center">
+                <button type="submit" class="rounded-0 btn btn-outline-success w-50" id="buscarCliente">
+                    Validar
+                </button>
+            </div>
+
+
+        </form>
         <form action="" method="post">
             {% csrf_token %}
-            <h1 class="h1">Nueva Venta</h1>
-            <div class="mb-3">
-                <label for="id_cliente" class="form-label">Cliente</label>
-                <div class="d-flex">
-                    {{ form.cliente }}
-                    <button type="button" class="rounded-0 btn btn-outline-success ms-2" id="buscarCliente">Buscar
-                        Cliente</button>
-                </div>
-                <div id="infoCliente" class="mt-3"></div>
-            </div>
-            <div class="mb-3">
-                <label for="id_bus" class="form-label">Bus</label>
-                <div class="d-flex">
-                    {{ form.bus }}
-                    <button type="button" class="rounded-0 btn btn-outline-success ms-2" id="buscarBus">Ver
-                        Horarios</button>
-                </div>
-            </div>
-            <div id="infoHorarios" class="mt-3"></div>
-            <div id="infoAsientos" class="mt-3"></div>
-            <input type="hidden" name="asientos" id="asientosSeleccionados">
+            <input type="hidden" name="cliente_id" value="{{cliente.id}}">
+            <input type="hidden" name="id_bus" value="{{bus.id}}">
+            <input type="hidden" name="id_viaje" value="{{viaje.id}}">
 
+            {% if asientos %}
+            <label for="puestos">Selecciona los puestos: </label>
+            <div class="row">
+                {% for a in asientos %}
+                <div class="col-2">
+                    <input type="checkbox" name="puestos" id="puestos" {%if a.ocupado%}disabled{%endif%} value="{{a.id}}">
+                    <span class="w-100 p-3 btn {%if a.ocupado%}btn-danger{%else%}btn-success{%endif%}">{{forloop.counter}}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
             <div class="d-sm-flex m-5 justify-content-center">
                 <button type="submit" class="rounded-0 btn btn-outline-success w-75">RESERVAR</button>
             </div>
@@ -35,103 +74,4 @@
 
     </div>
 </div>
-
-
-<script>
-    let asientos = [];
-    document.querySelector('form').addEventListener('submit', function (event) {
-        const asientosInput = document.getElementById('asientosSeleccionados');
-        // Convierte la lista de asientos en una cadena JSON para enviarla
-        asientosInput.value = JSON.stringify(asientos);
-    });
-
-    document.getElementById('buscarCliente').addEventListener('click', function () {
-        const dni = document.getElementById('id_cliente').value;
-        if (dni) {
-            fetch(`/ventas/ver_cliente/?dni=${dni}`)
-                .then(response => response.json())
-                .then(data => {
-                    const infoDiv = document.getElementById('infoCliente');
-                    if (data.error) {
-                        infoDiv.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
-                    } else {
-                        infoDiv.innerHTML = `
-                                <div class="alert alert-success">
-                                    <input type='hidden' value='${data.id}' name='cliente'></input>
-                                    <strong>Cliente:</strong> ${data.nombre_completo}<br>
-                                    <strong>Email:</strong> ${data.email}
-                                </div>`;
-                    }
-                });
-        } else {
-            alert('Por favor, ingresa el DNI del cliente.');
-        }
-    });
-
-    document.getElementById('buscarBus').addEventListener('click', function () {
-        const busId = document.getElementById('id_bus').value;
-        if (busId) {
-            fetch(`/ventas/ver_horarios/?id_bus=${busId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // Mostrar Horarios
-                    const horariosDiv = document.getElementById('infoHorarios');
-                    if (data.horarios) {
-                        horariosDiv.innerHTML = `
-                            <div class="d-flex">
-                                <h5>Horarios Disponibles:</h5>
-                                <select class="form-select" id="horario_asiento">
-                                    <option value = "">--Selecciona un horario --</option>
-                                    ${data.horarios.map(h => `<option value="${h.id}">${h.hora}</option>`).join('')}
-                                </select>
-                            </div>
-                            
-                            `;
-                    }
-                });
-        } else {
-            alert('Por favor, selecciona un bus.');
-        }
-    });
-
-    document.getElementById('infoHorarios').addEventListener('change', async function (event) {
-        if (event.target && event.target.id === 'horario_asiento') {
-            const horarioID = event.target.value;
-            const busId = document.getElementById('id_bus').value;
-            if (horarioID) {
-                try {
-                    const response = await fetch(`/ventas/ver_asientos/?id_bus=${busId}&id_horario=${horarioID}`);
-                    const data = await response.json();
-                    // Mostrar Asientos
-                    const asientosDiv = document.getElementById('infoAsientos');
-                    if (data.asientos) {
-                        asientosDiv.innerHTML = `
-                        <h5>Asientos Disponibles:</h5>
-                        <div class="row">
-                            ${data.asientos.map((a, index) => `
-                                <div class="col-2">
-                                    <input type="checkbox" id="asiento${a.id}" name="asiento${a.id}" value="${a.id}" ${a.ocupado ? 'disabled="true"' : ''} onclick='agregar_asiento(${a.id})'>
-                                    <label for="asiento${a.id}" class="btn btn-sm btn-${a.ocupado ? 'danger' : 'success'} w-100">${index + 1}</br>${a.ocupado ? 'Ocupado' : 'Libre'}</label>
-
-                                </div>`).join('')}
-                        </div>`;
-                    }
-                } catch (error) {
-                    console.error('Error al obtener asientos:', error);
-                }
-            } else {
-                alert('Selecciona un horario');
-            }
-        }
-    });
-
-    function agregar_asiento(id) {
-        if (asientos.includes(id)) {
-            asientos.splice(asientos.indexOf(id), 1); 
-        } else {
-            asientos.push(id);
-        }
-        console.log(asientos);
-    }
-</script>
 {% endblock %}

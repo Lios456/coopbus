@@ -13,6 +13,7 @@ def administracion(request):
             form = HorarioForm(request.POST)
             if form.is_valid():
                 form.save()
+                
                 messages.success(request, 'Se guardó con éxito el Horario')
             else:
                 messages.warning(request, 'Rellena los campos adecuadamente')
