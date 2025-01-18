@@ -14,6 +14,9 @@ class Venta(models.Model):
     asiento = models.ManyToManyField(Asientos, related_name='asientos')
     fecha = models.DateTimeField(auto_now=True, auto_created=True)
 
+    def __str__(self):
+        return f'{self.cliente} {self.bus} {self.horario} {self.asiento.all()} {self.fecha}'
+
 
 class VentaForm(forms.ModelForm):
 

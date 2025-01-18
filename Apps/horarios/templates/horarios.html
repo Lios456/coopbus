@@ -2,39 +2,43 @@
 
 
 {% block body %}
-    <div class="row p-5">
-        
-        {% for h in horarios %}
-        <div class="col-sm-3 p-3 mb-5">
-            <div class="rounded-0 border-0 card shadow-lg">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-12">
-                      <h1>{{h.codigo}}</h4>
-                    </div>
-                    <div class="col-12">
-                      <p><b>Hora:</b> {{h.hora}}</h2>
-                    </div>
-                    <div class="col-12">
-                      <p><b>Ruta:</b> {{h.ruta}}</h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="card-footer bg-body">
-                    <div class="d-flex justify-content-end align-items-center">
-                        <a href="/horarios/administracion/editar/{{h.id}}" class="rounded-0 btn btn-sm me-2 btn-outline-warning">Editar</a>
-                        <form action="/horarios/administracion/eliminar/{{h.id}}" method="post">
-                            {% csrf_token %}
-                            <button class="rounded-0 btn btn-outline-danger btn-sm">
-                                Eliminar
-                            </button>
-                        </form>
-                    </div>
-                </div>
+<div class="container m-5 text-center">
+  <div class="row pt-5">
+    <h2>Horarios Registrados</h2>
+  </div>
+  <div class="row p-5">
+    {% for h in horarios %}
+    <div class="col-lg-3 p-3 mb-5">
+      <div class="rounded-0 border-0 card shadow-lg">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <h1>{{h.codigo}}</h4>
             </div>
+            <div class="col-12">
+              <p><b>Hora:</b> {{h.hora}}</h2>
+            </div>
+            <div class="col-12">
+              <p><b>Ruta:</b> {{h.ruta}}</h3>
+            </div>
+          </div>
         </div>
-        {% endfor %}
-            
+        <div class="card-footer bg-body">
+          <div class="d-flex justify-content-end align-items-center">
+            <a href="/horarios/administracion/editar/{{h.id}}"
+              class="rounded-0 btn btn-sm me-2 btn-outline-warning">Editar</a>
+            <form action="/horarios/administracion/eliminar/{{h.id}}" method="post">
+              {% csrf_token %}
+              <button class="rounded-0 btn btn-outline-danger btn-sm">
+                Eliminar
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-{% endblock  %}
-    
+    {% endfor %}
+
+  </div>
+</div>
+{% endblock %}

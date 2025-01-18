@@ -15,7 +15,7 @@ class Conductores(models.Model):
     celular = models.CharField(max_length=10)
 
     def __str__(self):
-        return f"{self.apellido1} {self.apellido2} {self.nombres}"
+        return f"{self.dni} {self.apellido1} {self.apellido2} {self.nombres}"
 
 class ConductoresForm(ModelForm):
 

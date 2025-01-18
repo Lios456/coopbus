@@ -1,13 +1,14 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from .models import *
+from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
 
 def buses(request):
     return render(request, 'buses.html', {'total_buses':Buses.objects.count(), 
                                           'buses':Buses.objects.all(),
                                           'titulo':'BUSES'})
-
+@staff_member_required(login_url='/usuarios/login/')
 def administracion(request):
     if request.method == 'POST':
         try:
@@ -28,7 +29,7 @@ def administracion(request):
         return render(request, 'administracion.html', {'buses':Buses.objects.filter(estado='ACTIVO'),
                                                        'formulario':BusForm(),
                                                        'titulo':'Administración de BUSES'})
-
+@staff_member_required(login_url='/usuarios/login/')
 def eliminar(request, id):
     if request.method == 'POST':
         try:
@@ -42,7 +43,7 @@ def eliminar(request, id):
         return render(request, 'administracion.html', {'buses':Buses.objects.filter(estado='ACTIVO'),
                                                        'formulario':BusForm(),
                                                        'titulo':'Administración de BUSES'})
-    
+@staff_member_required(login_url='/usuarios/login/')
 def editar(request, id):
     bus = Buses.objects.get(id=id)
     form = BusForm(instance=bus)

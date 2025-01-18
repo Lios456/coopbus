@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import *
+from django.contrib.admin.views.decorators import staff_member_required
+
 # Create your views here.
 
 def inicio(request):
     return render(request, 'viajes.html', {'viajes':Viaje.objects.all(),
                                           'titulo':'VIAJES'})
-
+@staff_member_required(login_url='/usuarios/login/')
 def administracion(request):
     if request.method == 'POST':
         try:
@@ -39,7 +41,7 @@ def administracion(request):
     else:
         return render(request, 'administracion_viajes.html', {'formulario':ViajeForm(),
                                                                'titulo':'Administración de VIAJES'})
-
+@staff_member_required(login_url='/usuarios/login/')
 def eliminar(request, id):
     if request.method == 'POST':
         try:
@@ -59,7 +61,7 @@ def eliminar(request, id):
     else:
         return render(request, 'administracion_viajes.html', {'formulario':ViajeForm(),
                                                                'titulo':'Administración de VIAJES'})
-    
+@staff_member_required(login_url='/usuarios/login/') 
 def editar(request, id):
     viaje = Viaje.objects.get(id=id)
     form = ViajeForm(instance=viaje)

@@ -24,7 +24,7 @@ class BusForm(forms.ModelForm):
         widgets = {
             'placa': forms.TextInput(attrs={'class': 'form-control'}),
             'foto': forms.FileInput(attrs={'class': 'form-control'}),
-            'conductor': forms.Select(attrs={'class': 'form-select'}),
+            'conductor': forms.Select(attrs={'class': 'form-select select2'}),
             'marca': forms.TextInput(attrs={'class': 'form-control'}),
             'anio': forms.NumberInput(attrs={'class': 'form-control'}),
             'estado': forms.Select(attrs={'class': 'form-select'}),
@@ -37,4 +37,4 @@ class Asientos(models.Model):
     ocupado = models.BooleanField(verbose_name='ASIENTO', default=False)
 
     def __str__(self):
-        return f'Asiento {self.id} del Bus {self.bus} : {self.ocupado}'
+        return f'Asiento {self.id}'

@@ -2,14 +2,21 @@
 
 {% block body %}
 
-<div class="d-flex justify-content-center align-items-center">
-    <div class="shadow-lg w-50 p-5 m-5">
-        <form method="post">
-            {% csrf_token %}
-            {{formulario.as_p}}
-            <button type="submit" class="rounded-0 btn btn-outline-success">Guardar</button>
-        </form>
+<div class="container-lg m-5 p-5">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="shadow-lg w-50 p-5 m-5">
+            <div class="d-flex justify-content-center align-items-center">
+                <h2>Nuevo viaje</h2>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                {{formulario.as_p}}
+                <button type="submit" class="btn btn-outline-success">Guardar</button>
+            </form>
+        </div>
     </div>
 </div>
+
+
     
 {% endblock %}

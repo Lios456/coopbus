@@ -5,22 +5,41 @@ from django.http import JsonResponse
 from .models import *
 from ..buses.models import *
 from ..viajes.models import *
+from django.db.models import *
+from django.db.models.functions import *
 
 # Create your views here.
 
 def dash(request):
-    return render(request, 'dash.html', {'titulo': 'Panel de Ventas'})
+    context = {'titulo': 'Panel de Ventas',
+               'ventas':Venta.objects.all(),
+               'total_ventas':Venta.objects.select_related('horario__ruta').aggregate(total_ventas=Sum('horario__ruta__precio'))['total_ventas'],
+               'ventas_por_anio':(
+                        Venta.objects
+                        .annotate(anio=ExtractYear('fecha'))
+                        .values('anio')
+                        .annotate(total_ventas=Sum('horario__ruta__precio'))
+                        .order_by('anio')
+                    ),
+                'ventas_por_mes':(
+                        Venta.objects
+                        .annotate(mes=ExtractMonth('fecha'))
+                        .values('mes')
+                        .annotate(total_ventas=Sum('horario__ruta__precio'))
+                        .order_by('mes')
+                    )
+               }
+    return render(request, 'dash.html', context)
 
 def venta(request):
     if request.method == 'POST':
         try:
             asientos_seleccionados = request.POST.getlist('puestos')
             if asientos_seleccionados:
-                """
                 v = Venta()
                 v.cliente = Cliente.objects.get(id = int(request.POST.get('cliente_id')))
                 v.bus = Buses.objects.get(id = int(request.POST.get('id_bus')))
-                v.horario = Horario.objects.get(id = int(request.POST.get('horario_id')))
+                v.horario = Viaje.objects.get(id = int(request.POST.get('id_viaje'))).horario
                 v.save()
                 
                 for _ in asientos_seleccionados:
@@ -28,7 +47,6 @@ def venta(request):
                     asi.ocupado = True
                     asi.save()
                     v.asiento.add(asi)
-                """
                 messages.success(request, f'Asientos seleccionados: {asientos_seleccionados}')  
             else:
                 messages.error(request, 'No hay asientos')

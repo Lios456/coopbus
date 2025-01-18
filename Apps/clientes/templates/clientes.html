@@ -3,84 +3,89 @@
 
 {% block body %}
 
-<div class="row justify-content-center">
-    {% for cliente in clientes %}
-    <div class="col-md-6 mt-3 mb-3">
-        <div class="card shadow-lg">
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <h4 class="mb-0">Detalles del Cliente</h4>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-4 text-center mb-4">
-                        {% if cliente.foto %}
-                            <img src="{{ cliente.foto.url }}" alt="Foto de {{ cliente.nombres }}" 
-                                 class="img-fluid rounded-circle mb-2" style="width: 200px; height: 200px; object-fit: cover;">
-                        {% else %}
-                            <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto"
-                                 style="width: 200px; height: 200px;">
-                                <span class="text-white display-4">{{ cliente.nombres|first|upper }}{{ cliente.apellido1|first|upper }}</span>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-md-8">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <div class="detail-item">
-                                    <label class="text-muted small mb-1">ID Cliente</label>
-                                    <p class="mb-3 fw-bold">{{ cliente.id }}</p>
+<div class="container p-5 mt-5">
+    <div class="row justify-content-center text-center">
+        <h2>Clientes Registrados</h2>
+    </div>
+    <div class="row justify-content-center">
+        {% for cliente in clientes %}
+        <div class="col-md-6 mt-3 mb-3">
+            <div class="card shadow-lg h-100">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Detalles del Cliente</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            {% if cliente.foto %}
+                                <img src="{{ cliente.foto.url }}" alt="Foto de {{ cliente.nombres }}" 
+                                     class="img-fluid rounded-circle mb-2" style="width: 200px; height: 200px; object-fit: cover;">
+                            {% else %}
+                                <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                                     style="width: 200px; height: 200px;">
+                                    <span class="text-white display-4">{{ cliente.nombres|first|upper }}{{ cliente.apellido1|first|upper }}</span>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="detail-item">
-                                    <label class="text-muted small mb-1">DNI</label>
-                                    <p class="mb-3 fw-bold">{{ cliente.dni }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <label class="text-muted small mb-1">ID Cliente</label>
+                                        <p class="mb-3 fw-bold">{{ cliente.id }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="detail-item">
-                                    <label class="text-muted small mb-1">Primer Apellido</label>
-                                    <p class="mb-3 fw-bold">{{ cliente.apellido1 }}</p>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <label class="text-muted small mb-1">DNI</label>
+                                        <p class="mb-3 fw-bold">{{ cliente.dni }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="detail-item">
-                                    <label class="text-muted small mb-1">Segundo Apellido</label>
-                                    <p class="mb-3 fw-bold">{{ cliente.apellido2 }}</p>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <label class="text-muted small mb-1">Primer Apellido</label>
+                                        <p class="mb-3 fw-bold">{{ cliente.apellido1 }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="detail-item">
-                                    <label class="text-muted small mb-1">Nombres</label>
-                                    <p class="mb-3 fw-bold">{{ cliente.nombres }}</p>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <label class="text-muted small mb-1">Segundo Apellido</label>
+                                        <p class="mb-3 fw-bold">{{ cliente.apellido2 }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="detail-item">
-                                    <label class="text-muted small mb-1">Correo Electrónico</label>
-                                    <p class="mb-3 fw-bold">{{ cliente.email }}</p>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <label class="text-muted small mb-1">Nombres</label>
+                                        <p class="mb-3 fw-bold">{{ cliente.nombres }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="detail-item">
+                                        <label class="text-muted small mb-1">Correo Electrónico</label>
+                                        <p class="mb-3 fw-bold">{{ cliente.email }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card-footer bg-white">
-                <div class="d-flex justify-content-end">
-                    <a href="/clientes/administracion/editar/{{cliente.id}}" class="rounded-0 btn btn-outline-primary btn-sm me-2">
-                        <i class="bi bi-pencil"></i> Editar
-                    </a>
-                    <form action="/clientes/administracion/eliminar/{{cliente.id}}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="rounded-0 btn btn-outline-danger btn-sm" onclick="return confirm('Segundo quieres eliminar el cliente con el DNI: {{cliente.dni}}')" >
-                            <i class="bi bi-trash"></i> Eliminar
-                        </button>
-                    </form>
+                <div class="card-footer bg-white">
+                    <div class="d-flex justify-content-end">
+                        <a href="/clientes/administracion/editar/{{cliente.id}}" class="rounded-0 btn btn-outline-primary btn-sm me-2">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                        <form action="/clientes/administracion/eliminar/{{cliente.id}}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="rounded-0 btn btn-outline-danger btn-sm" onclick="return confirm('Segundo quieres eliminar el cliente con el DNI: {{cliente.dni}}')" >
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
     
 {% endblock%}

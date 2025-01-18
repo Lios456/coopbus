@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import *
+from django.contrib.admin.views.decorators import staff_member_required
+
 # Create your views here.
 
 def inicio(request):
     return render(request, 'horarios.html', {'horarios':Horario.objects.all(),
                                           'titulo':'HORARIOS'})
-
+@staff_member_required(login_url='/usuarios/login/')
 def administracion(request):
     if request.method == 'POST':
         try:
@@ -26,7 +28,7 @@ def administracion(request):
     else:
         return render(request, 'administracion_horarios.html', {'formulario':HorarioForm(),
                                                                'titulo':'Administración de HORARIOS'})
-
+@staff_member_required(login_url='/usuarios/login/')
 def eliminar(request, id):
     if request.method == 'POST':
         try:
@@ -39,7 +41,7 @@ def eliminar(request, id):
     else:
         return render(request, 'administracion_horarios.html', {'formulario':HorarioForm(),
                                                                'titulo':'Administración de HORARIOS'})
-    
+@staff_member_required(login_url='/usuarios/login/')
 def editar(request, id):
     horario = Horario.objects.get(id=id)
     form = HorarioForm(instance=horario)

@@ -1,77 +1,80 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<div class="container-sm d-sm-flex justify-content-center">
-    <div class="container w-75 shadow-lg bg-body-tertiary p-5 m-3">
-        <h1 class="h1">Nueva Venta</h1>
-        <form action="" method="get">
-            {% csrf_token %}
-            <div class="row m-3">
-                <label for="" class="form-label">Cliente</label>
-                <input type="text" name="cliente_dni" id="cliente_dni" class="form-control" value="{{cliente.dni}}" required>
-            </div>
-            {% if cliente %}
-            <div class="alert alert-success" class="mt-3">
-                Cliente encontrado: {{cliente}}
-            </div>
-            {% endif %}
-            <div class="row m-3">
-                <label for="" class="form-label">BUS</label>
-                <select name="bus_id" id="bus_id" class="form-select" required>
-                    <option value="">-- Selecciona un bus --</option>
-                    {% for b in buses %}
-                    <option value="{{b.id}}" {% if b.id == bus.id %}selected{% endif %}>{{b}}</option>
-                    {% endfor %}
-                </select>
-            </div>
 
-            {% if viajes %}
-            <div class="row">
-                <label for="" class="form-label">VIAJE</label>
-                <select name="id_viaje" id="id_viaje" class="form-select">
-                    <option value="">-- Selecciona un viaje --</option>
-                    {% for v in viajes %}
-                    <option value="{{v.id}}" {%if v.id == viaje.id %}selected{%endif%} >{{v}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            {% else %}
-            <div class="alert alert-danger" class="mt-3">
-                La unidad no tiene viajes asignados
-            </div>
-            {% endif %}
-
-            <div class="d-flex row m-3 justify-content-center">
-                <button type="submit" class="rounded-0 btn btn-outline-success w-50" id="buscarCliente">
-                    Validar
-                </button>
-            </div>
-
-
-        </form>
-        <form action="" method="post">
-            {% csrf_token %}
-            <input type="hidden" name="cliente_id" value="{{cliente.id}}">
-            <input type="hidden" name="id_bus" value="{{bus.id}}">
-            <input type="hidden" name="id_viaje" value="{{viaje.id}}">
-
-            {% if asientos %}
-            <label for="puestos">Selecciona los puestos: </label>
-            <div class="row">
-                {% for a in asientos %}
-                <div class="col-2">
-                    <input type="checkbox" name="puestos" id="puestos" {%if a.ocupado%}disabled{%endif%} value="{{a.id}}">
-                    <span class="w-100 p-3 btn {%if a.ocupado%}btn-danger{%else%}btn-success{%endif%}">{{forloop.counter}}</span>
+<div class="container-lg m-5 p-5">
+    <div class="container-lg d-lg-flex justify-content-center">
+        <div class="container w-75 shadow-lg bg-body-tertiary p-5 m-3">
+            <h1 class="h1">Nueva Venta</h1>
+            <form action="" method="get">
+                <div class="row m-3">
+                    <label for="" class="form-label">Cliente</label>
+                    <input type="text" name="cliente_dni" id="cliente_dni" class="form-control" value="{{cliente.dni}}" required>
                 </div>
-                {% endfor %}
-            </div>
-            {% endif %}
-            <div class="d-sm-flex m-5 justify-content-center">
-                <button type="submit" class="rounded-0 btn btn-outline-success w-75">RESERVAR</button>
-            </div>
-        </form>
-
-
+                {% if cliente %}
+                <div class="alert alert-success" class="mt-3">
+                    Cliente encontrado: {{cliente}}
+                </div>
+                {% endif %}
+                <div class="row m-3">
+                    <label for="" class="form-label">BUS</label>
+                    <select name="bus_id" id="bus_id" class="form-select" required>
+                        <option value="">-- Selecciona un bus --</option>
+                        {% for b in buses %}
+                        <option value="{{b.id}}" {% if b.id == bus.id %}selected{% endif %}>{{b}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+                {% if viajes %}
+                <div class="row">
+                    <label for="" class="form-label">VIAJE</label>
+                    <select name="id_viaje" id="id_viaje" class="select2">
+                        <option value="">-- Selecciona un viaje --</option>
+                        {% for v in viajes %}
+                        <option value="{{v.id}}" {%if v.id == viaje.id %}selected{%endif%} >{{v}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% else %}
+                <div class="alert alert-danger" class="mt-3">
+                    La unidad no tiene viajes asignados
+                </div>
+                {% endif %}
+    
+                <div class="d-flex row m-3 justify-content-center">
+                    <button type="submit" class="rounded-0 btn btn-outline-success w-50" id="buscarCliente">
+                        Validar
+                    </button>
+                </div>
+    
+    
+            </form>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="cliente_id" value="{{cliente.id}}">
+                <input type="hidden" name="id_bus" value="{{bus.id}}">
+                <input type="hidden" name="id_viaje" value="{{viaje.id}}">
+    
+                {% if asientos %}
+                <label for="puestos">Selecciona los puestos: </label>
+                <div class="row">
+                    {% for a in asientos %}
+                    <div class="col-2">
+                        <input type="checkbox" name="puestos" id="puestos" {%if a.ocupado%}disabled{%endif%} value="{{a.id}}">
+                        <span class="w-100 p-3 btn {%if a.ocupado%}btn-danger{%else%}btn-success{%endif%}">{{forloop.counter}}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="d-sm-flex m-5 justify-content-center">
+                    <button type="submit" class="rounded-0 btn btn-outline-success w-75">RESERVAR</button>
+                </div>
+            </form>
+    
+    
+        </div>
     </div>
 </div>
+
 {% endblock %}

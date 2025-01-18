@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="layoutSidenav_content">
+    <div class="d-sm-flex justify-content-center m-5">
+        <div class="table-responsive w-75 p-5">
+            <table class="table table-dark table-striped jquery_table" >
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Email</th>
+                        <th>Nombre de usuario</th>
+                        <th>Grupo</th>
+                        <th>Permisos</th>
+                        <th>Super usuario</th>
+                        <th>Parte del staff</th>
+                        <th>Está activo</th>
+                        <th>Día de registro</th>
+                        <th>Último login</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in usuarios%}
+                    <tr>
+                        <td>{{u.first_name}}</td>
+                        <td>{{u.last_name}}</td>
+                        <td>{{u.email}}</td>
+                        <td>{{ u.username }}</td>
+                        <td>
+                            {% for g in u.groups.all %}
+                                {{g }} <br>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for p in u.user_permissions.all %}
+                                {{p}} <br>
+                            {% endfor %}
+                            
+                        </td>
+                        <td>
+                            <div class="btn pt-3
+                            
+                            {% if u.is_superuser == True %}
+                                btn-success
+                            {% else %}
+                                btn-danger
+                            {% endif %}
+                                
+                            "></div>
+                        </td>
+                        <td>
+                            <div class="btn pt-3
+                            
+                            {% if u.is_staff == True %}
+                                btn-success
+                            {% else %}
+                                btn-danger
+                            {% endif %}
+                                
+                            "></div>
+                        </td>
+                        <td>
+                            <div class="btn pt-3
+                            
+                            {% if u.is_active == True %}
+                                btn-success
+                            {% else %}
+                                btn-danger
+                            {% endif %}
+                                
+                            "></div>
+                        </td>
+                        <td>{{u.date_joined }}</td>
+                        <td>{{u.last_login }}</td>
+                        <td></td>
+                    </tr>
+                    {%endfor%}
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+    

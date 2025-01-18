@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import *
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
-
+@staff_member_required(login_url='/usuarios/login/')
 def inicio(request):
     return render(request, 'conductores.html', {'conductores': Conductores.objects.all()})
 
+@staff_member_required(login_url='/usuarios/login/')
 def administracion(request):
     if request.method == 'POST':
         form = ConductoresForm(request.POST)
@@ -23,7 +25,7 @@ def administracion(request):
             return render(request, 'administracion_conductores.html', {'form': form})
     else:
         return render(request, 'administracion_conductores.html', {'form': ConductoresForm()})
-    
+@staff_member_required(login_url='/usuarios/login/') 
 def eliminar(request, id):
     if request.method == 'POST':
         try:
@@ -35,7 +37,7 @@ def eliminar(request, id):
             return redirect('/conductores/')
     else:
         return render(request, 'conductores.html', {'conductores': Conductores.objects.all()})
-    
+@staff_member_required(login_url='/usuarios/login/') 
 def editar(request, id):
     conductor = Conductores.objects.get(id=id)
     form = ConductoresForm(instance=conductor)

@@ -2,6 +2,37 @@
 
 {% block body %}
 
-    
+<div class="row d-flex justify-content-center">
+    <div class="alert alert-success col-6 shadow-lg m-5 p-5">
+        <p><b>Haz vendido un total de: </b>{{total_ventas}}$</p>
+        {% for anio in ventas_por_anio %}
+            <p><b>En el año {{anio.anio}} haz vendido: </b>{{anio.total_ventas}}$</p>
+        {% endfor %}
+
+        {% for mes in ventas_por_mes %}
+            <p><b>En el mes {{mes.mes}} haz vendido: </b>{{mes.total_ventas}}$</p>
+        {% endfor %}
+        
+    </div>
+</div>
+
+<div class="row d-flex justify-content-center">
+    {% for v in ventas %}
+    <div class="col-10 container shadow-lg m-3 p-3">
+        <div class="row">
+            <div class="col-6">
+                <p><b>Cliente:</b> {{v.cliente}}</p>
+                <p><b>Bus:</b> {{v.bus}}</p>
+                <p><b>Horario:</b> {{v.horario}}</p>
+                <p><b>Asientos:</b> {{v.asiento.count}}</p>
+                <p><b>Fecha:</b> {{v.fecha}}</p>
+            </div>
+            <div class="col-6 d-flex align-items-center justify-content-end p-5">
+                <a href="/facturas/factura/{{v.id}}/pdf/" class="btn btn-primary" >Ver PDF</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}
-    

@@ -21,7 +21,7 @@ class HorarioForm(forms.ModelForm):
         widgets={
             'codigo' : forms.TextInput(attrs={'class':'form-control'}),
             'hora' : forms.TimeInput(attrs={'class':'form-control', 'type':'time'}),
-            'ruta' : forms.Select(attrs={'class':'form-select'}),
+            'ruta' : forms.Select(attrs={'class':'form-select select2'}),
             
         }
 

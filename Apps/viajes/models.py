@@ -23,8 +23,8 @@ class ViajeForm(forms.ModelForm):
         fields = '__all__'
         widgets={
             'codigo': forms.TextInput(attrs={'class':'form-control'}),
-            'bus': forms.Select(attrs={'class':'form-select'}),
-            'horario': forms.Select(attrs={'class':'form-select'}),
+            'bus': forms.Select(attrs={'class':'form-select select2'}),
+            'horario': forms.Select(attrs={'class':'form-select select2'}),
             'n_puestos' : forms.NumberInput(attrs={'class':'form-control'}),
         }
 
